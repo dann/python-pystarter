@@ -4,11 +4,11 @@ template: |
   # -*- coding: utf-8 -*-
 
   """
-      [% module %] is the .
+      {{ module }} is the .
   
       It provides .
   
-      :copyright: (c) 2011 by [% config.author %].
+      :copyright: (c) 2011 by {{ config.author }}.
       :license: BSD, see LICENSE for more details.
   """
 
@@ -214,19 +214,19 @@ template: |
 ---
 file: CHANGES.rst
 template: |
-  [% module %] ChangeLog
+  {{ module }} ChangeLog
   ===============================
 
   Version 0.01 
   ------------
-  Released on [% localtime %]
+  Released on {{ localtime }}
 
   - initial release
 
 ---
 file: LICENSE.txt
 template: |
-  Copyright (c) 2012, [% config.author %]
+  Copyright (c) 2012, {{ config.author }}
   All rights reserved.
   
   Redistribution and use in source and binary forms, with or without
@@ -236,7 +236,7 @@ template: |
       * Redistributions in binary form must reproduce the above copyright
         notice, this list of conditions and the following disclaimer in the
         documentation and/or other materials provided with the distribution.
-      * Neither the name of the [% config.author %] nor the
+      * Neither the name of the {{ config.author }} nor the
         names of its contributors may be used to endorse or promote products
         derived from this software without specific prior written permission.
   
@@ -254,28 +254,28 @@ template: |
 ---
 file: README.rst
 template: |
-  [% module %]
+  {{ module }}
   =====================
 
 
   INSTALLATION
   -------------
 
-  [% module %] installation is straightforward. If your pip is set up,
+  {{ module }} installation is straightforward. If your pip is set up,
   you should just be able to do
 
-      % pip install [% module %]
+      % pip install {{ module }}
 
   DOCUMENTATION
   -------------
 
-  [% module %] documentation is available . So you can do:
+  {{ module }} documentation is available . So you can do:
 
-      % pydoc [% module %]
+      % pydoc {{ module }}
 
   to read the documentation online with your favorite pager.
 
-  [% config.author %]
+  {{ config.author }}
 
 ---
 file: setup.py
@@ -303,9 +303,9 @@ template: |
       'nose',
       ]
   
-  setup(name='[% module %]',
+  setup(name='{{ module }}',
         version='0.01',
-        description=('[% module %] project'),
+        description=('{{ module }} project'),
         long_description=README + '\n\n' +  CHANGES,
         classifiers=[
           "Intended Audience :: Developers",
@@ -319,9 +319,9 @@ template: |
           'Topic :: Software Development :: Libraries :: Python Modules'
           ],
         keywords='',
-        author="[% config.author %]",
-        author_email="[% config.email %] ",
-        url="http://github.com/dann/python-[% module %]",
+        author="{{ config.author }}",
+        author_email="{{ config.email }} ",
+        url="http://github.com/dann/python-{{ module }}",
         license="New BSD License",
         packages=find_packages(),
         include_package_data=True,
@@ -356,7 +356,7 @@ template: |
   .coverage
   .tox/
   nosetests.xml
-  [% module %]/coverage.xml
+  {{ module }}/coverage.xml
   build/
   dist/
   bin/
