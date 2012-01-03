@@ -34,9 +34,20 @@ class ModuleStarter:
         self.init_git_repo(module)
 
     def creaete_and_move_distdir(self, module):
-        PathUtil.create_workdir(self.config)
-        dist_dir = PathUtil.create_dist_dir(module)
+        self._create_workdir(self.config)
+        dist_dir = self._create_dist_dir(module)
         PathUtil.chdir(dist_dir)
+
+    def _create_dist_dir(self, module):
+        dist_dir = 'python-%s' % module
+        if not PathUtil.exists(dist_dir):
+            os.mkdir(dist_dir)
+        return dist_dir
+
+    def _create_workdir(self, config):
+        workdir = config['workdir']
+        if not PathUtil.exists(workdir):
+            PathUtil.mkpath(workdir)
 
     def init_config(self):
         return Config.init()
@@ -49,7 +60,7 @@ class ModuleStarter:
         for tmpl in templates:
             file = tmpl['file']
             file = re.sub('\$module', module, file)
-            self._write_file(file, tmpl['template'], vars)
+            self._write_template_file(file, tmpl['template'], vars)
 
     def generate_sphinx_docs(self, module, config):
         gen_command = \
@@ -94,7 +105,7 @@ EOF
         for step in steps:
             ShellUtil.execute_command(step)
 
-    def _write_file(
+    def _write_template_file(
         self,
         path,
         template,
@@ -108,19 +119,12 @@ EOF
                 return
 
         dir = PathUtil.dirname(path)
-
         if not PathUtil.exists(dir):
             Logger.info('Creating directory %s' % dir)
             PathUtil.mkpath(dir)
 
         content = self._render(template, vars)
-
-        Logger.info('Creating %s' % path)
-        f = open(path, 'w')
-        try:
-            f.write(content)
-        finally:
-            f.close()
+        FileUtil.write_file(path, content)
 
     def _render(self, template, vars):
         return self.renderer.render(template, vars)
@@ -132,13 +136,9 @@ class TemplateRenderer:
         self.templates_path = templates_path
 
     def load_templates(self):
-        f = open(self.templates_path)
-        try:
-            templates_content = f.read()
-            templates_content = templates_content.decode('utf8')
-            return yaml.load_all(templates_content)
-        finally:
-            f.close()
+        templates_content = FileUtil.read_file(self.templates_path)
+        templates_content = templates_content.decode('utf8')
+        return yaml.load_all(templates_content)
 
     def render(self, template, vars):
         env = jinja2.Environment()
@@ -161,19 +161,6 @@ class Logger:
 class PathUtil:
 
     @staticmethod
-    def create_dist_dir(module):
-        dist_dir = 'python-%s' % module
-        if not PathUtil.exists(dist_dir):
-            os.mkdir(dist_dir)
-        return dist_dir
-
-    @staticmethod
-    def create_workdir(config):
-        workdir = config['workdir']
-        if not PathUtil.exists(workdir):
-            PathUtil.mkpath(workdir)
-
-    @staticmethod
     def chdir(dir):
         os.chdir(dir)
 
@@ -192,6 +179,27 @@ class PathUtil:
 
         if not os.access(path, os.F_OK):
             os.makedirs(path)
+
+
+class FileUtil:
+
+    @staticmethod
+    def write_file(path, content):
+        Logger.info('Creating %s' % path)
+        f = open(path, 'w')
+        try:
+            f.write(content)
+        finally:
+            f.close()
+
+    @staticmethod
+    def read_file(path):
+        f = open(path)
+        try:
+            templates_content = f.read()
+            return templates_content
+        finally:
+            f.close()
 
 
 class ShellUtil:
