@@ -102,7 +102,7 @@ EOF
         ):
 
         if PathUtil.exists(path):
-            ans = ShellUtil.prompt("%s exists. Override? [yN] " % path,
+            ans = ShellUtil.prompt('%s exists. Override? [yN] ' % path,
                                    'n')
             if not re.match('[Yy]', ans):
                 return
@@ -110,12 +110,12 @@ EOF
         dir = PathUtil.dirname(path)
 
         if not PathUtil.exists(dir):
-            Logger.info("Creating directory %s" % dir)
+            Logger.info('Creating directory %s' % dir)
             PathUtil.mkpath(dir)
 
         content = self._render(template, vars)
 
-        Logger.info("Creating %s" % path)
+        Logger.info('Creating %s' % path)
         f = open(path, 'w')
         try:
             f.write(content)
@@ -211,7 +211,7 @@ class Config:
 
     @staticmethod
     def init():
-        workdir = os.path.join(os.environ['HOME'], '.pystarter', "tmp")
+        workdir = os.path.join(os.environ['HOME'], '.pystarter', 'tmp')
         config = Pit.get('pystarter', {'require': {'author'
                          : 'your username', 'email': 'your email',
                          'workdir': workdir}})
@@ -225,15 +225,13 @@ class Config:
 
 def parse_args():
     parser = OptionParser(usage=globals()['__doc__'],
-                          version="%prog 1.0")
-    #parser.add_option("-h", "--help", dest="help",
-    #              help="show help", metavar="HELP")
-
+                          version='%prog 1.0')
     (options, args) = parser.parse_args()
     if len(args) != 1:
-        parser.error("Wrong number of arguments")
+        parser.error('Wrong number of arguments')
 
-    return (options, args) 
+    return (options, args)
+
 
 def get_templates_path():
     templates_path = os.path.join(os.environ['HOME'], '.pystarter',
@@ -247,13 +245,14 @@ def get_templates_path():
 
 
 def main():
-    (options, args) = parse_args();
+    (options, args) = parse_args()
 
     module = args[0]
     templates_path = get_templates_path()
 
     starter = ModuleStarter(templates_path)
     starter.generate(module)
+
 
 if __name__ == '__main__':
     main()
