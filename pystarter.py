@@ -104,7 +104,7 @@ EOF
         if PathUtil.exists(path):
             ans = ShellUtil.prompt('%s exists. Override? [yN] ' % path,
                                    'n')
-            if not ans.match('[Yy]'):
+            if not re.match('[Yy]', ans):
                 return
 
         dir = PathUtil.dirname(path)
@@ -239,7 +239,6 @@ def main():
     (options, args) = parse_args();
 
     module = args[0]
-    print module
     templates_path = os.path.join(os.environ['HOME'], '.pystarter',
                                   'module_templates.yaml')
     if not PathUtil.exists(templates_path):
