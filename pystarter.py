@@ -102,7 +102,7 @@ EOF
         ):
 
         if PathUtil.exists(path):
-            ans = ShellUtil.prompt('%s exists. Override? [yN] ' % path,
+            ans = ShellUtil.prompt("%s exists. Override? [yN] " % path,
                                    'n')
             if not re.match('[Yy]', ans):
                 return
@@ -110,12 +110,12 @@ EOF
         dir = PathUtil.dirname(path)
 
         if not PathUtil.exists(dir):
-            Logger.info('Creating directory %s\n' % dir)
+            Logger.info("Creating directory %s" % dir)
             PathUtil.mkpath(dir)
 
         content = self._render(template, vars)
 
-        Logger.info('Creating %s\n' % path)
+        Logger.info("Creating %s" % path)
         f = open(path, 'w')
         try:
             f.write(content)
@@ -235,10 +235,7 @@ def parse_args():
 
     return (options, args) 
 
-def main():
-    (options, args) = parse_args();
-
-    module = args[0]
+def get_templates_path():
     templates_path = os.path.join(os.environ['HOME'], '.pystarter',
                                   'module_templates.yaml')
     if not PathUtil.exists(templates_path):
@@ -246,6 +243,14 @@ def main():
                     templates.yaml to generate the python module"
                       % templates_path)
         sys.exit(1)
+    return templates_path
+
+
+def main():
+    (options, args) = parse_args();
+
+    module = args[0]
+    templates_path = get_templates_path()
 
     starter = ModuleStarter(templates_path)
     starter.generate(module)
