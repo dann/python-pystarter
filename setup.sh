@@ -6,6 +6,7 @@
 PYTHON_MODULES=(
 jinja2
 yaml
+sphinx
 )
 
 setup() {
